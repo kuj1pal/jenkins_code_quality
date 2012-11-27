@@ -25,7 +25,7 @@ import traceback
 # Global settings
 env = get_environment()
 env['INSTALL_DIR'] = os.getcwd()
-EC2_KEY_PATH = env['INSTALL_DIR'] +'/amazon/ec2-keypair.pem'
+EC2_KEY_PATH = env['INSTALL_DIR'] +'/wiki_server_key/ec2-keypair.pem'
 ROS_WIKI_SERVER = 'ubuntu@ec2-184-169-231-58.us-west-1.compute.amazonaws.com:~/doc'
       
 def get_options(required, optional):
