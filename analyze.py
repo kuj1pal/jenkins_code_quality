@@ -138,6 +138,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             helper.communicate()
 	    if helper.returncode != 0:
                 res = helper.returncode
+                print "FFFFFFFFFFFFFFFFFFFFFFFFFFFf"
+                return 
      
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
@@ -192,9 +194,6 @@ def main():
 
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro, stack_name)
     res = analyze(ros_distro, stack_name, workspace, test_depends_on=options.depends_on)
-    if res != 0:
-        return res
-
 
 
 if __name__ == '__main__':
