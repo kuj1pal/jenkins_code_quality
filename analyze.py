@@ -192,7 +192,9 @@ def main():
     workspace = os.environ['WORKSPACE']
 
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro, stack_name)
-    analyze(ros_distro, stack_name, workspace, test_depends_on=options.depends_on)
+    res = analyze(ros_distro, stack_name, workspace, test_depends_on=options.depends_on)
+    if res != 0:
+        return res
 
 
 
