@@ -2,6 +2,7 @@
 from analyze import *
 import optparse
 
+
 def main():
     parser = optparse.OptionParser()
     (options, args) = parser.parse_args()
@@ -20,15 +21,13 @@ def main():
     #print "Running prerelease test on distro %s and repositories %s"%(ros_distro, ', '.join(["%s (%s)"%(r,v) for r, v in zip(repo_list, version_list)]))
     #test_repositories(ros_distro, repo_list, version_list, workspace, test_depends_on=True)
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro,stack_name)
-    res = analyze(ros_distro, stack_name, workspace, test_depends_on=True)
-    if res != 0:
-        return res
+    analyze(ros_distro, stack_name, workspace, test_depends_on=True)
+
 
 if __name__ == '__main__':
     # global try
     try:
-        res = main()
-        print "result from main: %s"%(res)
+        main()
         print "code_quality_stack script finished cleanly"
 
     # global catch
