@@ -203,7 +203,7 @@ if __name__ == '__main__':
     try:
         res = main()
         print res
-        if res =! 0:
+        if res != 0:
             raise ex
         print "analyze script finished cleanly"
 
