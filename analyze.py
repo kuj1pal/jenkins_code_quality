@@ -50,8 +50,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
                                                                  ros_distro)
 	print "<<<<<%s"%(env['ROS_PACKAGE_PATH'])
-        # return
-
+        
         if 'ros' in stack_name:
             env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
             print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
@@ -201,10 +200,7 @@ def main():
 if __name__ == '__main__':
     # global try
     try:
-        res = main()
-        print res
-        if res != 0:
-            raise ex
+        main()
         print "analyze script finished cleanly"
 
     # global catch
