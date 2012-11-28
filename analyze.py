@@ -201,7 +201,10 @@ def main():
 if __name__ == '__main__':
     # global try
     try:
-        main()
+        res = main()
+        print res
+        if res =! 0:
+            raise ex
         print "analyze script finished cleanly"
 
     # global catch
