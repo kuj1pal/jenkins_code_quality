@@ -260,9 +260,9 @@ class HudsonHelper:
                          'ROBOT' : 'sim',
                          'JAVA_HOME' : '/usr/lib/jvm/java-6-openjdk/',
                          'DISPLAY' : ':0.0'})
-	    print '---------------------------------------'
+	  
         print env_vars['ROS_PACKAGE_PATH']
-        print '---------------------------------------'
+       
 	
         if 'SVN_REVISION' in env_vars:
             del env_vars['SVN_REVISION']
