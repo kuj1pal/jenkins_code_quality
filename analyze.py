@@ -136,14 +136,14 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
 	    helper = subprocess.Popen(('./build_helper.py --dir %s build'%(STACK_DIR + '/' + stack_name)).split(' '), env=env)
         helper.communicate()
-        print "helper.returncode: %s"%(helper.returncode)
-        
+        #print "helper.returncode: %s"%(helper.returncode)
+
 	    if helper.returncode != 0:
                 res = helper.returncode
                 print "EEEEEEEEEENNNNNNNNNNNNNNTTTTTTTTTTTTRRRRRRRRRRRRRRRRYYYYYYYYYY"
                 print "helper_return_code: %s"%()
-                #assert False
                 raise Exception("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF!")
+                #assert False
                     
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
