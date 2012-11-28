@@ -138,9 +138,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             helper.communicate()
 	    if helper.returncode != 0:
                 res = helper.returncode
-                print "FFFFFFFFFFFFFFFFFFFFFFFFFFFf"
-                return 
-     
+                assert False
+                # raise UndefinedException
+                    
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
