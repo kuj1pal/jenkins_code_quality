@@ -138,8 +138,10 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             helper.communicate()
 	    if helper.returncode != 0:
                 res = helper.returncode
-                assert False
-                # raise UndefinedException
+                print "EEEEEEEEEENNNNNNNNNNNNNNTTTTTTTTTTTTRRRRRRRRRRRRRRRRYYYYYYYYYY"
+                print "helper_return_code: %s"%()
+                #assert False
+                raise Exception("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF!")
                     
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
