@@ -139,6 +139,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                 helper.communicate()
 	        if helper.returncode != 0:
                     res = helper.returncode
+		    raise ex
         except RuntimeError, e:
             print "build_helper.py exception caught (build_helper.py is called from script analyze.py)"
             print "%s. Check the console output for test failure details."%e
