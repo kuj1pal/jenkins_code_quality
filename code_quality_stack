@@ -6,7 +6,7 @@ def main():
     parser = optparse.OptionParser()
     (options, args) = parser.parse_args()
 
-   if len(args) <= 1 or len(args)>=3:
+    if len(args) <= 1 or len(args)>=3:
         print "Usage: %s ros_distro  stack_name "%sys.argv[0]
         print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
         print " - with stack_name the name of the stack you want to analyze"
