@@ -260,7 +260,7 @@ class HudsonHelper:
                          'ROBOT' : 'sim',
                          'JAVA_HOME' : '/usr/lib/jvm/java-6-openjdk/',
                          'DISPLAY' : ':0.0'})
-	print '---------------------------------------'
+	    print '---------------------------------------'
         print env_vars['ROS_PACKAGE_PATH']
         print '---------------------------------------'
 	
@@ -308,6 +308,7 @@ class HudsonHelper:
         except (CalledProcessError, OSError), e:
             failure = True
             print >> sys.stderr, '[%s] Error in build step:%s'%(NAME,e)
+            assert false
             #if not self.keep_going:
             #    self.post_build(failure, test_failure, workspace)
 	
