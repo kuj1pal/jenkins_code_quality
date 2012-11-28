@@ -26,39 +26,7 @@ def remove(list1, list2):
 def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
-    #if test_depends_on:
-        #print "Testing depends-on"
-    #else:
-        #print "Not testing depends on"
 
-    # clean up old tmp directory
-    #shutil.rmtree(os.path.join(workspace, 'tmp'), ignore_errors=True)
-
-    # set directories
-    #tmpdir = os.path.join('/tmp', 'analyze')
-    #repo_sourcespace = os.path.join(tmpdir, 'src_repository')
-    #dependson_sourcespace = os.path.join(tmpdir, 'src_depends_on')
-    #repo_buildspace = os.path.join(tmpdir, 'build_repository')
-    #dependson_buildspace = os.path.join(tmpdir, 'build_depend_on')
-
-    # Add ros sources to apt
-    #print "Add ros sources to apt"
-    #with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
-        #f.write("deb http://packages.ros.org/ros-shadow-fixed/ubuntu %s main"%os.environ['OS_PLATFORM'])
-	#f.write("deb http://packages.ros.org/ros/ubuntu %s main"%os.environ['OS_PLATFORM'])
-    #call("wget http://packages.ros.org/ros.key -O %s/ros.key"%workspace)
-    #call("apt-key add %s/ros.key"%workspace)
-    #call("apt-get update")
-
-    # install stuff we need
-    #print "Installing Debian packages we need for running this script"
-    #call("apt-get install python-catkin-pkg python-rosinstall --yes")
-    #call("apt-get install python-rosinstall --yes")  
-
-    # parse the rosdistro file
-    #print "Parsing rosdistro file for %s"%ros_distro
-    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-    #distro = RosDistro(ros_distro, prefetch_dependencies=test_depends_on, prefetch_upstream=False)
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
 
@@ -102,14 +70,13 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         'Set output-color for installing to yellow')
         print 'Installing the stacks to test from source'
         rosinstall_file = '%s.rosinstall'%STACK_DIR
-	print 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+	
         if os.path.exists(rosinstall_file):
             os.remove(rosinstall_file)
-        print 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+        
 	if os.path.exists('%s/.rosinstall'%STACK_DIR):
             os.remove('%s/.rosinstall'%STACK_DIR)
         rosinstall = ''
-	print 'cccccccccccccccccccccccccccccccc'
 	
         #for stack in stack_name:
 	print 'stack: %s'%(stack_name)
@@ -143,22 +110,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
 	   
         if len(depends_all) > 0:
-	    '''
-            if options.source_only:
-                # Install dependencies from source
-                print 'Installing stack dependencies from source'
-                rosinstall = stacks_to_rosinstall(depends_all, rosdistro_obj.released_stacks, 'release-tar')
-                rosinstall_file = '%s.rosinstall'%DEPENDS_DIR
-                print 'Generating rosinstall file [%s]'%(rosinstall_file)
-                print 'Contents:\n\n'+rosinstall+'\n\n'
-                with open(rosinstall_file, 'w') as f:
-                    f.write(rosinstall)
-                    print 'rosinstall file [%s] generated'%(rosinstall_file)
-                call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(DEPENDS_DIR, ros_distro, rosinstall_file), env,
-                     'Install the stack dependencies from source.')
-	    else:
-	    '''
-            # Install Debian packages of stack dependencies
+	    # Install Debian packages of stack dependencies
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
             call('sudo apt-get install %s --yes'%(stacks_to_debs(depends_all, ros_distro)), env)
@@ -189,10 +141,6 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
-	    #print '+++++++++++++++++++++++++++++++++++'
-	    #print 'stack_name[0]: %s'%(stack_name[0])
-	    #print 'stack_name[0]: %s'%(str(stack_name))
-	    #print '-----------------------------------'
 	    stack_dir = STACK_DIR + '/' + str(stack_name)
             filelist = stack_dir + '/filelist.lst'
             helper = subprocess.Popen(('./concatenate_filelists.py --dir %s --filelist %s'%(stack_dir, filelist)).split(' '), env=env)
@@ -226,19 +174,6 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         raise ex
 
 
-
-
-
-
-
-    #call("./common.py")
-    #helper = subprocess.Popen(('./concatenate_filelists.py ').split(' '), env=env)
-
-    ###########################################
-    ###########################################
-
-
-
 def main():
     parser = optparse.OptionParser()
     parser.add_option("--depends_on", action="store_true", default=False)
@@ -248,13 +183,10 @@ def main():
         print "Usage: %s ros_distro  stack_name "%sys.argv[0]
     	print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
         print " - with stack_name the name of the stack you want to analyze"
-        #print " - with version 'latest', 'devel', or the actual version number (e.g. 0.2.5)."
         raise BuildException("Wrong arguments for analyze script")
 
     ros_distro = args[0]
     stack_name = args[1]
-    #repo_list = [args[i] for i in range(1, len(args), 2)]
-    #version_list = [args[i+1] for i in range(1, len(args), 2)]
     workspace = os.environ['WORKSPACE']
 
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro, stack_name)
