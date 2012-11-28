@@ -28,8 +28,6 @@ if __name__ == '__main__':
     # global try
     try:
         res = main()
-        if res != 0:
-            return res
         print "result from main: %s"%(res)
         print "code_quality_stack script finished cleanly"
 
