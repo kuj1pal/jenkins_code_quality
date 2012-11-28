@@ -130,14 +130,21 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
              'Set color from build-output to blue')        
 	print "Running Hudson Helper for stacks we're testing"
         res = 0
-        #for r in range(0, int(options.repeat)+1):
+
+	try:        
+	#for r in range(0, int(options.repeat)+1):
 	for r in range(0, int(0)+1):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
 	    helper = subprocess.Popen(('./build_helper.py --dir %s build'%(STACK_DIR + '/' + stack_name)).split(' '), env=env)
             helper.communicate()
 	    if helper.returncode != 0:
                 res = helper.returncode
-            
+        except RuntimeError, e:
+            print "build_helper.py exception caught (build_helper.py is called from script analyze.py)"
+            print "%s. Check the console output for test failure details."%e
+            traceback.print_exc(file=sys.stdout)
+            raise e
+     
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
