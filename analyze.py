@@ -140,7 +140,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         if helper.returncode != 0:
             res = helper.returncode
             print "EEEEEEEEEENNNNNNNNNNNNNNTTTTTTTTTTTTRRRRRRRRRRRRRRRRYYYYYYYYYY"
-            print "helper_return_code: %s"%()
+            print "helper_return_code: %s"%(helper.returncode)
             raise Exception("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF!")
             
             # concatenate filelists
