@@ -123,7 +123,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                 call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(DEPENDS_DIR, ros_distro, rosinstall_file), env,
                      'Install the stack dependencies from source.')
 	    else:
-	    '''
+	'''
             # Install Debian packages of stack dependencies
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
