@@ -107,9 +107,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                     print 'Adding dependencies of stack %s'%d
                     get_depends_all(rosdistro_obj, d, depends_all)
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
-	'''
-        if len(depends_all) > 0:
-	    
+	
+        #if len(depends_all) > 0:
+	 '''   
             if options.source_only:
                 # Install dependencies from source
                 print 'Installing stack dependencies from source'
