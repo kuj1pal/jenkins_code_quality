@@ -25,7 +25,8 @@ import traceback
 # Global settings
 env = get_environment()
 env['INSTALL_DIR'] = os.getcwd()
-EC2_KEY_PATH = env['INSTALL_DIR'] +'/wiki_server_key/ec2-keypair.pem'
+#EC2_KEY_PATH = env['INSTALL_DIR'] +'/wiki_server_key/ec2-keypair.pem'
+WIKI_SERVER_KEY_PATH = os.environ['HOME'] +'/chroot_configs/wiki_server_key/ec2-keypair.pem'
 ROS_WIKI_SERVER = 'ubuntu@ec2-184-169-231-58.us-west-1.compute.amazonaws.com:~/doc'
       
 def get_options(required, optional):
@@ -304,7 +305,7 @@ if __name__ == '__main__':
             os.makedirs(doc_dir)
         hh = ExportYAML(config, stack_dir, doc_dir, csv_dir)
         hh.export()
-	call('sudo scp -r -i %s %s %s'%(EC2_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
+	call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
 		,env, 'Push stack-yaml-file to ros-wiki ')
 	        
     # get packages
@@ -320,6 +321,6 @@ if __name__ == '__main__':
             os.makedirs(doc_dir)
         hh = ExportYAML(config, package_dir, doc_dir, csv_dir)
         hh.export()
-	call('sudo scp -r -i %s %s %s'%(EC2_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
+	call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
 		,env, 'Push package-yaml-file to ros-wiki ')        
 
