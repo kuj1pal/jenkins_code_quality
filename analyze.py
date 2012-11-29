@@ -107,9 +107,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                     print 'Adding dependencies of stack %s'%d
                     get_depends_all(rosdistro_obj, d, depends_all)
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
-	   
+	'''
         if len(depends_all) > 0:
-	    '''
+	    
             if options.source_only:
                 # Install dependencies from source
                 print 'Installing stack dependencies from source'
@@ -122,9 +122,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                     print 'rosinstall file [%s] generated'%(rosinstall_file)
                 call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(DEPENDS_DIR, ros_distro, rosinstall_file), env,
                      'Install the stack dependencies from source.')
-        '''
 	    else:
-	    
+	    '''
             # Install Debian packages of stack dependencies
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
@@ -153,10 +152,11 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	    helper = subprocess.Popen(('./build_helper.py --dir %s build'%(STACK_DIR + '/' + stack_name)).split(' '), env=env)
         helper.communicate()
         print "helper_return_code is: %s"%(helper.returncode)
-	if helper.returncode != 0:
-	    res = helper.returncode
-            print "helper_return_code is: %s"%(helper.returncode)
-            raise Exception("build_helper.py failed. Often an analysis mistake. Check out the console output above for details.")
+	
+	    if helper.returncode != 0:
+	        res = helper.returncode
+                print "helper_return_code is: %s"%(helper.returncode)
+                raise Exception("build_helper.py failed. Often an analysis mistake. Check out the console output above for details.")
 	   
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
