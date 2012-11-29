@@ -109,14 +109,29 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
 	   
         if len(depends_all) > 0:
-	    # Install Debian packages of stack dependencies
+	    '''
+            if options.source_only:
+                # Install dependencies from source
+                print 'Installing stack dependencies from source'
+                rosinstall = stacks_to_rosinstall(depends_all, rosdistro_obj.released_stacks, 'release-tar')
+                rosinstall_file = '%s.rosinstall'%DEPENDS_DIR
+                print 'Generating rosinstall file [%s]'%(rosinstall_file)
+                print 'Contents:\n\n'+rosinstall+'\n\n'
+                with open(rosinstall_file, 'w') as f:
+                    f.write(rosinstall)
+                    print 'rosinstall file [%s] generated'%(rosinstall_file)
+                call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(DEPENDS_DIR, ros_distro, rosinstall_file), env,
+                     'Install the stack dependencies from source.')
+	    else:
+	    '''
+            # Install Debian packages of stack dependencies
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
             call('sudo apt-get install %s --yes'%(stacks_to_debs(depends_all, ros_distro)), env)
 	else:
             print 'Stack(s) %s do(es) not have any dependencies, not installing anything now'%str(stack_name)
 	   
-	print 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+	
 	# Install system dependencies of stacks we're testing
         print "Installing system dependencies of stacks we're testing"
         call('rosmake rosdep', env)
@@ -138,11 +153,10 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         helper.communicate()
         print "helper_return_code is: %s"%(helper.returncode)
 	if helper.returncode != 0:
-	    print 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
-            res = helper.returncode
+	    res = helper.returncode
             print "helper_return_code is: %s"%(helper.returncode)
             raise Exception("build_helper.py failed. Often an analysis mistake. Check out the console output above for details.")
-	print 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'    
+	   
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
@@ -195,7 +209,8 @@ def main():
     workspace = os.environ['WORKSPACE']
 
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro, stack_name)
-    res = analyze(ros_distro, stack_name, workspace, test_depends_on=options.depends_on)
+    analyze(ros_distro, stack_name, workspace, test_depends_on=options.depends_on)
+
 
 
 if __name__ == '__main__':
