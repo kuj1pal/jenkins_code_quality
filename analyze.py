@@ -123,7 +123,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         #for stack in stack_name:
         call('rosdep install -y %s'%stack_name, env,
              'Install system dependencies of stack %s'%stack_name)
-	print 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
+	
         # Run hudson helper for stacks only
 	call('echo -e "\033[33;34m Color Text"', env,
              'Set color from build-output to blue')        
@@ -136,12 +136,13 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
 	    helper = subprocess.Popen(('./build_helper.py --dir %s build'%(STACK_DIR + '/' + stack_name)).split(' '), env=env)
         helper.communicate()
-        print 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'
-        if helper.returncode != 0:
+        print "helper_return_code is: %s"%(helper.returncode)
+	if helper.returncode != 0:
+	    print 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
             res = helper.returncode
             print "helper_return_code is: %s"%(helper.returncode)
             raise Exception("build_helper.py failed. Often an analysis mistake. Check out the console output above for details.")
-            
+	print 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'    
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
