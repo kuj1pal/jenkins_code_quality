@@ -113,7 +113,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
             call('sudo apt-get install %s --yes'%(stacks_to_debs(depends_all, ros_distro)), env)
-	else:
+	    else:
             print 'Stack(s) %s do(es) not have any dependencies, not installing anything now'%str(stack_name)
 	   
 
