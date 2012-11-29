@@ -113,24 +113,24 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
             call('sudo apt-get install %s --yes'%(stacks_to_debs(depends_all, ros_distro)), env)
-	    else:
+	else:
             print 'Stack(s) %s do(es) not have any dependencies, not installing anything now'%str(stack_name)
 	   
-
+	print 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
 	# Install system dependencies of stacks we're testing
         print "Installing system dependencies of stacks we're testing"
         call('rosmake rosdep', env)
         #for stack in stack_name:
         call('rosdep install -y %s'%stack_name, env,
              'Install system dependencies of stack %s'%stack_name)
-	
+	print 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
         # Run hudson helper for stacks only
 	call('echo -e "\033[33;34m Color Text"', env,
              'Set color from build-output to blue')        
 	print "Running Hudson Helper for stacks we're testing"
         res = 0
 
-    	       
+    	print 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'     
 	#for r in range(0, int(options.repeat)+1):
 	for r in range(0, int(0)+1):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
