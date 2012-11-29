@@ -49,7 +49,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_DIR,
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
                                                                  ros_distro)
-	print "<<<<<%s"%(env['ROS_PACKAGE_PATH'])
+	print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
         
         if 'ros' in stack_name:
             env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
