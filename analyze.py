@@ -139,9 +139,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         
         if helper.returncode != 0:
             res = helper.returncode
-            print "EEEEEEEEEENNNNNNNNNNNNNNTTTTTTTTTTTTRRRRRRRRRRRRRRRRYYYYYYYYYY"
-            print "helper_return_code: %s"%(helper.returncode)
-            raise Exception("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF!")
+            print "helper_return_code is: %s"%(helper.returncode)
+            raise Exception("build_helper.py failed. Often an analysis mistake. Check out the console output above for details.")
             
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
