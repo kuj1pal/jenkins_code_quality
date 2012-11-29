@@ -136,9 +136,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	for r in range(0, int(0)+1):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
 	    helper = subprocess.Popen(('./build_helper.py --dir %s build'%(STACK_DIR + '/' + stack_name)).split(' '), env=env)
-        helper.communicate()
-        print "helper_return_code is: %s"%(helper.returncode)
-	
+            helper.communicate()
+            print "helper_return_code is: %s"%(helper.returncode)
 	    if helper.returncode != 0:
 	        res = helper.returncode
                 print "helper_return_code is: %s"%(helper.returncode)
