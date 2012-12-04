@@ -11,7 +11,7 @@ from time import sleep
 #
 import roslib; roslib.load_manifest("job_generation")
 from roslib import stack_manifest
-import rosdistro
+#import rosdistro
 from jobs_common import *
 from apt_parser import parse_apt
 import traceback
@@ -26,9 +26,11 @@ def remove(list1, list2):
 def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
-
-    distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
-    distro2 = rosdistro.RosDistro(ros_distro)
+    
+    call("apt-get install python-catkin-pkg python-rosinstall python-rosdistro --yes")
+    import rosdistro
+    #distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
+    distro = rosdistro.RosDistro(ros_distro)
 
     STACK_DIR = 'stack_overlay'
     DEPENDS_DIR = 'depends_overlay'
