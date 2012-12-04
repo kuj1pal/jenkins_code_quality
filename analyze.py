@@ -27,8 +27,17 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
+
+    # Add ros sources to apt
+    print "Add ros sources to apt"
+    with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
+        f.write("deb http://packages.ros.org/ros-shadow-fixed/ubuntu %s main"%os.environ['OS_PLATFORM'])
+    call("wget http://packages.ros.org/ros.key -O %s/ros.key"%workspace)
+    call("apt-key add %s/ros.key"%workspace)
+    call("apt-get update")
     call("apt-get install python-catkin-pkg python-rosinstall python-rosdistro --yes")
     import rosdistro
+
     #distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
     distro = rosdistro.RosDistro(ros_distro)
 
