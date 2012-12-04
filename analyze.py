@@ -28,7 +28,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing stack %s"%stack_name
 
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
-
+    distro2 = rosdistro.RosDistro(ros_distro)
 
     STACK_DIR = 'stack_overlay'
     DEPENDS_DIR = 'depends_overlay'
