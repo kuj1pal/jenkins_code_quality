@@ -13,7 +13,7 @@ from time import sleep
 #from roslib import stack_manifest
 #import rosdistro
 #from jobs_common import *
-from apt_parser import parse_apt
+#from apt_parser import parse_apt
 import traceback
 #
 
@@ -46,6 +46,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     import traceback
     import shutil
     from common import *
+    from apt_parser import parse_apt
     
     # To call the qacpp-wrapper
     call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
