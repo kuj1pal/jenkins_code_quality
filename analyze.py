@@ -45,7 +45,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     from jobs_common import *
     import traceback
     
-    call("sudo cp /home/user/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake")
+    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     #####
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
