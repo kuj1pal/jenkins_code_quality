@@ -4,7 +4,7 @@ import sys
 import subprocess
 import string
 import fnmatch
-import shutil
+#import shutil
 import optparse
 from common import *
 from time import sleep
@@ -44,7 +44,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     import rosdistro
     from jobs_common import *
     import traceback
+    import shutil
     
+    # To call the qacpp-wrapper
     call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     #####
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
