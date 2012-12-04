@@ -6,7 +6,7 @@ import string
 import fnmatch
 #import shutil
 import optparse
-from common import *
+#from common import *
 from time import sleep
 #
 #import roslib; roslib.load_manifest("job_generation")
@@ -45,6 +45,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     from jobs_common import *
     import traceback
     import shutil
+    from common import *
     
     # To call the qacpp-wrapper
     call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
