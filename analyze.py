@@ -27,7 +27,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
-    #####
+    ####
     # Add ros sources to apt
     print "Add ros sources to apt"
     with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
