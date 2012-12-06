@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from analyze import *
+from run_analysis import *
 import optparse
 
 
@@ -21,7 +21,7 @@ def main():
     #print "Running prerelease test on distro %s and repositories %s"%(ros_distro, ', '.join(["%s (%s)"%(r,v) for r, v in zip(repo_list, version_list)]))
     #test_repositories(ros_distro, repo_list, version_list, workspace, test_depends_on=True)
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro,stack_name)
-    analyze(ros_distro, stack_name, workspace, test_depends_on=True)
+    run_analysis(ros_distro, stack_name, workspace, test_depends_on=True)
 
 
 if __name__ == '__main__':

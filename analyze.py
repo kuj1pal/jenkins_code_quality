@@ -9,12 +9,14 @@ import optparse
 from common import *
 from time import sleep
 #
-#import roslib; roslib.load_manifest("job_generation")
-#from roslib import stack_manifest
-#import rosdistro
-#from jobs_common import *
-#from apt_parser import parse_apt
+import roslib; roslib.load_manifest("job_generation")
+import rosdistro
+from roslib import stack_manifest
+import rosdistro
+from jobs_common import *
 import traceback
+from common import *
+from apt_parser import parse_apt  
 #
 
 
@@ -59,26 +61,6 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                                                                  ros_distro)
     print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
     
-    env['QACPPPATH'] = '%s/qacpp-current'%(os.environ['HOME'])
-    env['QACPPHTMLVIEW'] = ''
-    env['QACPPPERSONALITIES'] = '%s/qacpp-current/personalities'%(os.environ['HOME'])
-    env['QACPPTEMPFILES'] = '%s/qacpp-current/TEMP_FILES'%(os.environ['HOME'])
-    env['QACPPRESOURCESDIR'] = '%s/qacpp-current/app-defaults'%(os.environ['HOME'])
-    env['QACPPDQAFILES'] = '%s/qacpp-current/demographics'%(os.environ['HOME'])
-    env['QACPPHELPFILES'] = '%s/qacpp-current/help'%(os.environ['HOME'])
-    env['QACPPOUTPATH'] = '.'
-    env['QACPPBIN'] = '%s/qacpp-current/bin'%(os.environ['HOME'])
-    env['HTMLVIEWBIN'] = '%s/qacpp-current/bin'%(os.environ['HOME'])
-    env['QACPPCC'] = 'cc'
-    env['XBINPATH'] = '/usr/bin'
-    env['PRLDHOST'] = '5055@localhost'
-    env['XTERM'] = 'xterm'
-    env['QACPPHTMLVIEW'] = ''
-    
-    
-    
-    
-
     if 'ros' in stack_name:
         env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
         print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
@@ -91,27 +73,6 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     sys.path.append("%s"%(env['PYTHONPATH']))
 
     
-    # Add ros sources to apt
-    print "Add ros sources to apt"
-    with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
-        f.write("deb http://packages.ros.org/ros/ubuntu lucid main")#%os.environ['OS_PLATFORM'])
-    call("wget http://packages.ros.org/ros.key -O %s/ros.key"%workspace)
-    call("apt-key add %s/ros.key"%workspace)
-    call("apt-get update")
-
-    # install stuff we need
-    print "Installing Debian packages we need for running this script"
-    call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
-    import roslib; roslib.load_manifest("job_generation")
-    import rosdistro
-    from roslib import stack_manifest
-    import rosdistro
-    from jobs_common import *
-    import traceback
-    #import shutil
-    from common import *
-    from apt_parser import parse_apt    
-
     # Need to copy rostoolchain.cmake to call qacpp-wrapper
     call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     
