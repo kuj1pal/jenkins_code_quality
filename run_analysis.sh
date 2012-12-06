@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh
 /bin/echo '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ run_analysis.sh ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
 # Add ros sources to apt
 #sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $OS_PLATFORM main" > /etc/apt/sources.list.d/ros-latest.list'
