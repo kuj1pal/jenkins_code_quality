@@ -27,6 +27,29 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
+##
+	print "Setting up environment"
+        env = get_environment()
+	env['INSTALL_DIR'] = os.getcwd()
+	os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
+	env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks:/home/user/el_workspace'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
+                                                                 env['INSTALL_DIR']+'/'+DEPENDS_DIR,
+                                                                 env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
+                                                                 ros_distro)
+	print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
+        
+        if 'ros' in stack_name:
+            env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
+            print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
+	else:
+            env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
+        env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
+        env['PATH'] = '/opt/ros/%s/ros/bin:%s'%(ros_distro, os.environ['PATH'])
+        print "Environment set to %s"%str(env)
+
+##
+
+
     ####
     # Add ros sources to apt
     print "Add ros sources to apt"
@@ -41,7 +64,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
     # To call the qacpp-wrapper
     call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
-    call("echo $ROS_PACKAGE_PATH")
+    sys.path.append("%s"%(env['PYTHONPATH']))
     #call("bash source /opt/ros/electric/setup.sh")
     #call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
     #call("cp %s/chroot_configs/"%(os.environ['HOME']))
@@ -70,24 +93,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         attr = []
         attr.append('32')
       
-	print "Setting up environment"
-        env = get_environment()
-	env['INSTALL_DIR'] = os.getcwd()
-	os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
-	env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks:/home/user/el_workspace'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
-                                                                 env['INSTALL_DIR']+'/'+DEPENDS_DIR,
-                                                                 env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
-                                                                 ros_distro)
-	print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
-        
-        if 'ros' in stack_name:
-            env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
-            print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
-	else:
-            env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
-        env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
-        env['PATH'] = '/opt/ros/%s/ros/bin:%s'%(ros_distro, os.environ['PATH'])
-        print "Environment set to %s"%str(env)
+###
+
+###
 	
         # Parse distro file
         rosdistro_obj = rosdistro.Distro(get_rosdistro_file(ros_distro))
