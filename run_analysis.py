@@ -37,7 +37,7 @@ def remove(list1, list2):
 #
 
 def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
-    print "Install stuff we need first"%
+    print "Install stuff we need first"
     print "(Testing on distro %s)"%ros_distro
     print "(Testing stack %s)"%stack_name
     
