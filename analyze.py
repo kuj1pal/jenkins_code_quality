@@ -41,6 +41,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
     # To call the qacpp-wrapper
     call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
+    call("echo $ROS_PACKAGE_PATH")
     #call("bash source /opt/ros/electric/setup.sh")
     #call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
     #call("cp %s/chroot_configs/"%(os.environ['HOME']))
