@@ -9,12 +9,12 @@ import optparse
 from common import *
 from time import sleep
 #
-import roslib; roslib.load_manifest("job_generation")
-from roslib import stack_manifest
-import rosdistro
+#import roslib; roslib.load_manifest("job_generation")
+#from roslib import stack_manifest
+#import rosdistro
 from jobs_common import *
-from apt_parser import parse_apt
-import traceback
+#from apt_parser import parse_apt
+#import traceback
 #
 
 def remove(list1, list2):
@@ -42,7 +42,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     import roslib; roslib.load_manifest("job_generation")
     from roslib import stack_manifest
     import rosdistro
-    from jobs_common import *
+    #from jobs_common import *
     import traceback
     import shutil
     from common import *
