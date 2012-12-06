@@ -85,7 +85,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     else:
         env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
         env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
-        env['PATH'] = '/opt/ros/%s/ros/bin:%s'%(ros_distro, os.environ['PATH']) #%s:%s:%s
+        env['PATH'] = '%s:%s:/opt/ros/%s/ros/bin:%s'%(env['QACPPBIN'],env['HTMLVIEWBIN'],ros_distro, os.environ['PATH']) #%s:%s:%s
 	print 'PATH %s'%( env['PATH'])
 	return
         print "Environment set to %s"%str(env)
