@@ -14,7 +14,7 @@ from time import sleep
 #import rosdistro
 #from jobs_common import *
 #from apt_parser import parse_apt
-#import traceback
+import traceback
 #
 
 
@@ -58,7 +58,18 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
                                                                  ros_distro)
     print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
-        
+    
+    env['QACPPBIN'] = '%s/qacpp-current/bin'%(os.environ['HOME'])
+    env['QACPPCC'] = 'cc'
+    env['QACPPDQAFILES'] = '%s/qacpp-current/demographics'%(os.environ['HOME'])
+    env['QACPPHELPFILES'] = '%s/qacpp-current/help'%(os.environ['HOME'])
+    env['QACPPHTMLVIEW'] = ''
+    env['QACPPOUTPATH'] = '.'
+    env['QACPPPATH'] = '%s/qacpp-current'%(os.environ['HOME'])
+    env['QACPPPERSONALITIES'] = '%s/qacpp-current/personalities'%(os.environ['HOME'])
+    env['QACPPRESOURCESDIR'] = '%s/qacpp-current/app-defaults'%(os.environ['HOME'])
+    env['QACPPTEMPFILES'] = '%s/qacpp-current/TEMP_FILES'%(os.environ['HOME'])
+
     if 'ros' in stack_name:
         env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
         print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
@@ -87,7 +98,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     import rosdistro
     from jobs_common import *
     import traceback
-    import shutil
+    #import shutil
     from common import *
     from apt_parser import parse_apt    
 
