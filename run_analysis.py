@@ -55,7 +55,8 @@ def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
     env['WORKSPACE'] = '%s'%workspace
     env['TEST_DEPENDS_ON'] = '%s'%test_depends_on
 
-    helper = subprocess.Popen(('bash $WORKSPACE/jenkins_code_quality/run_analysis.sh').split(' '), env=env)
+    print os.environ['WORKSPACE']
+    helper = subprocess.Popen(('bash %s/jenkins_code_quality/run_analysis.sh'%(os.environ['WORKSPACE'])).split(' '), env=env)
     helper.communicate()
    
 
