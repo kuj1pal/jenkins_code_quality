@@ -258,7 +258,7 @@ class ExportYAML:
     def create_loc(self):
         filename = self.doc + '/' + 'code_quantity.yaml'
 	#print 'cloc.pl %s --not-match-d=build --yaml --out %s'%(self.path, filename)
-        helper = subprocess.Popen(('cloc.pl %s --not-match-d=build --yaml --out %s'%(self.path, filename)).split(' '))
+        helper = subprocess.Popen(('cloc.pl %s --not-match-d=build --yaml --out %s'%(self.path, filename)).split(' '),env=env)
         helper.communicate()
                       
     def export(self):
