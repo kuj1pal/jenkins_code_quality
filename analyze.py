@@ -145,8 +145,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	print "Running Hudson Helper for stacks we're testing"
         res = 0
 
-    	print "os.environ['WORKSPACE']= %s"%workspace
-	#for r in range(0, int(options.repeat)+1):
+    	#for r in range(0, int(options.repeat)+1):
 	for r in range(0, int(0)+1):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
 	    helper = subprocess.Popen(('%s/jenkins_code_quality/build_helper.py --dir %s build'%(workspace,STACK_DIR + '/' + stack_name)).split(' '), env=env)
@@ -162,7 +161,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
              'Set color to white')
 	    stack_dir = STACK_DIR + '/' + str(stack_name)
             filelist = stack_dir + '/filelist.lst'
-            helper = subprocess.Popen(('%s/jenkins_code_quality/concatenate_filelists.py --dir %s --filelist %s'%(os.environ['WORKSPACE'],stack_dir, filelist)).split(' '), env=env)
+            helper = subprocess.Popen(('%s/jenkins_code_quality/concatenate_filelists.py --dir %s --filelist %s'%(workspace,stack_dir, filelist)).split(' '), env=env)
             helper.communicate()
             print 'Concatenate filelists done --> %s'%str(stack_name) 
              
@@ -175,7 +174,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             # export metrics to yaml and csv files
 	    print 'stack_dir: %s '%str(stack_dir)
 	    print 'stack_name[0]: %s '%str(stack_name)
-            helper = subprocess.Popen(('%s/jenkins_code_quality/export_metrics_to_yaml.py --path %s --doc doc --csv csv --config export_config.yaml'%(os.environ['WORKSPACE'],stack_dir)).split(' '), env=env)
+            helper = subprocess.Popen(('%s/jenkins_code_quality/export_metrics_to_yaml.py --path %s --doc doc --csv csv --config export_config.yaml'%(workspace,stack_dir)).split(' '), env=env)
             helper.communicate()
 	    call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
@@ -184,7 +183,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             # push results to server
 	    print 'stack_dir: %s '%str(stack_dir)
 	    print 'stack_name[0]: %s '%str(stack_name)
-            helper = subprocess.Popen(('%s/jenkins_code_quality/push_results_to_server.py --path %s --doc doc'%(os.environ['WORKSPACE'],stack_dir)).split(' '), env=env)
+            helper = subprocess.Popen(('%s/jenkins_code_quality/push_results_to_server.py --path %s --doc doc'%(workspace,stack_dir)).split(' '), env=env)
             helper.communicate()
 	    call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
