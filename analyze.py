@@ -145,11 +145,11 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	print "Running Hudson Helper for stacks we're testing"
         res = 0
 
-    	print "os.environ['WORKSPACE']"%os.environ['WORKSPACE']
+    	print "os.environ['WORKSPACE']"%workspace
 	#for r in range(0, int(options.repeat)+1):
 	for r in range(0, int(0)+1):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
-	    helper = subprocess.Popen(('build_helper.py --dir %s build'%(os.environ['WORKSPACE'],STACK_DIR + '/' + stack_name)).split(' '), env=env)
+	    helper = subprocess.Popen(('%s/jenkins_code_quality/build_helper.py --dir %s build'%(workspace,STACK_DIR + '/' + stack_name)).split(' '), env=env)
             helper.communicate()
             print "helper_return_code is: %s"%(helper.returncode)
 	    if helper.returncode != 0:
