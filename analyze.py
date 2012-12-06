@@ -40,7 +40,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Installing Debian packages we need for running this script"
     call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
     #call("bash source /opt/ros/electric/setup.sh")
-    call(export ROS_PACKAGE_PATH=/opt/ros/electric/stacks)
+    call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
     #call("cp %s/chroot_configs/"%(os.environ['HOME']))
     import rosdistro
     import roslib; roslib.load_manifest("job_generation")
