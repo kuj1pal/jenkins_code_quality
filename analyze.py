@@ -86,8 +86,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     #call("bash source /opt/ros/electric/setup.sh")
     #call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
     #call("cp %s/chroot_configs/"%(os.environ['HOME']))
-    import rosdistro
     import roslib; roslib.load_manifest("job_generation")
+    import rosdistro
     from roslib import stack_manifest
     import rosdistro
     from jobs_common import *
