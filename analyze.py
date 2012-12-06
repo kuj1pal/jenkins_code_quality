@@ -39,8 +39,10 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     # install stuff we need
     print "Installing Debian packages we need for running this script"
     call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
+    # To call the qacpp-wrapper
+    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     #call("bash source /opt/ros/electric/setup.sh")
-    call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
+    #call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
     #call("cp %s/chroot_configs/"%(os.environ['HOME']))
     import rosdistro
     import roslib; roslib.load_manifest("job_generation")
@@ -52,8 +54,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     from common import *
     from apt_parser import parse_apt
     
-    # To call the qacpp-wrapper
-    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
+  
     #####
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
