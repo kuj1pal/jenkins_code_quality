@@ -48,35 +48,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     DEPENDS_ON_DIR = 'depends_on_overlay'
 
     # set environment
-    attr = []
-    attr.append('32')
-
-    print "Setting up environment"
     env = get_environment2()
-    env['INSTALL_DIR'] = os.getcwd()
-    os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
-    env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks:/home/user/el_workspace'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
-                                                                 env['INSTALL_DIR']+'/'+DEPENDS_DIR,
-                                                                 env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
-                                                                 ros_distro)
-    print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
-    
-    if 'ros' in stack_name:
-        env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
-        print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
-    else:
-        env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
-        env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
-        env['PATH'] = '%s:%s:/opt/ros/%s/ros/bin:%s'%(env['QACPPBIN'],env['HTMLVIEWBIN'],ros_distro, os.environ['PATH']) #%s:%s:%s
-	#print 'PATH %s'%( env['PATH'])
-        print "Environment set to %s"%str(env)
-    sys.path.append("%s"%(env['PYTHONPATH']))
-
-    
-    # Need to copy rostoolchain.cmake to call qacpp-wrapper
-    #call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
-    
-
+   
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
 
