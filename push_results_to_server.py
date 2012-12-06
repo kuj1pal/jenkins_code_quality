@@ -56,7 +56,7 @@ def all_files(directory):
 
         
 if __name__ == '__main__':   
-    (options, args) = get_options(['path', 'doc'])
+    (options, args) = get_options(['path'], ['doc'])
     if not options:
         exit(-1)
     
