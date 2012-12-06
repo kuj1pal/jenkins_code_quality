@@ -76,13 +76,6 @@ def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
     env['WORKSPACE'] = '%s'%workspace
     env['TEST_DEPENDS_ON'] = '%s'%test_depends_on
 
-    # Add ros sources to apt
-    print "Add ros sources to apt"
-    with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
-        f.write("deb http://packages.ros.org/ros/ubuntu lucid main")#%os.environ['OS_PLATFORM'])
-    call("wget http://packages.ros.org/ros.key -O %s/ros.key"%workspace)
-    call("apt-key add %s/ros.key"%workspace)
-    call("apt-get update")
 
     helper = subprocess.Popen(('bash run_analysis.sh').split(' '), env=env)
     helper.communicate()
