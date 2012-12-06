@@ -305,8 +305,8 @@ if __name__ == '__main__':
             os.makedirs(doc_dir)
         hh = ExportYAML(config, stack_dir, doc_dir, csv_dir)
         hh.export()
-	call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
-		,env, 'Push stack-yaml-file to ros-wiki ')
+	#call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
+	#	,env, 'Push stack-yaml-file to ros-wiki ')
 	        
     # get packages
     print 'Exporting packages to yaml/csv'  
@@ -321,6 +321,6 @@ if __name__ == '__main__':
             os.makedirs(doc_dir)
         hh = ExportYAML(config, package_dir, doc_dir, csv_dir)
         hh.export()
-	call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
-		,env, 'Push package-yaml-file to ros-wiki ')        
+	#call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
+	#	,env, 'Push package-yaml-file to ros-wiki ')        
 

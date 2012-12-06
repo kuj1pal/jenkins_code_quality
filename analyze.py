@@ -179,7 +179,16 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             helper.communicate()
 	    call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
-            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)             
+            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)        
+            
+            # push results to server
+	    print 'stack_dir: %s '%str(stack_dir)
+	    print 'stack_name[0]: %s '%str(stack_name)
+            helper = subprocess.Popen(('./push_results_to_server.py --path %s --doc doc'%(stack_dir)).split(' '), env=env)
+            helper.communicate()
+	    call('echo -e "\033[33;0m Color Text"', env,
+             'Set color to white')
+            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)       
             print 'Analysis of stack %s done'%str(stack_name)
 	if res != 0:
             return res
