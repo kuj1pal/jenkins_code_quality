@@ -4,8 +4,9 @@
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $OS_PLATFORM main" > /etc/apt/sources.list.d/ros-latest.list'
 #wget http://packages.ros.org/ros.key -O $WORKSPACE/ros.key
 #apt-key add $WORKSPACE/ros.key
-wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 sudo apt-get update
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+
 
 # install stuff we need
 echo "Installing Debian packages we need for running this script"
