@@ -17,6 +17,19 @@ from time import sleep
 #import traceback
 #
 
+
+def get_environment2():
+    my_env = os.environ
+    my_env['WORKSPACE'] = os.getenv('WORKSPACE', '')
+    my_env['INSTALL_DIR'] = os.getenv('INSTALL_DIR', '')
+    #my_env['HOME'] = os.getenv('HOME', '')
+    my_env['HOME'] = os.path.expanduser('~')
+    my_env['JOB_NAME'] = os.getenv('JOB_NAME', '')
+    my_env['BUILD_NUMBER'] = os.getenv('BUILD_NUMBER', '')
+    my_env['ROS_TEST_RESULTS_DIR'] = os.getenv('ROS_TEST_RESULTS_DIR', my_env['WORKSPACE']+'/test_results')
+    my_env['PWD'] = os.getenv('WORKSPACE', '')
+    return my_env
+
 def remove(list1, list2):
     for l in list2:
         if l in list1:
@@ -29,7 +42,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     
 ##
     print "Setting up environment"
-    env = get_environment()
+    env = get_environment2()
     env['INSTALL_DIR'] = os.getcwd()
     os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
     env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks:/home/user/el_workspace'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
