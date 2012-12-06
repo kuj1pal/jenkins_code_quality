@@ -80,19 +80,6 @@ def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
     helper.communicate()
    
 
-    # global try
-    try:
-
-       
-
-
-    # global except
-    except Exception, ex:
-        print "Global exception caught."
-        print "%s. Check the console output for test failure details."%ex
-        traceback.print_exc(file=sys.stdout)
-        raise ex
-
 
 def main():
     parser = optparse.OptionParser()
