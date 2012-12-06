@@ -70,7 +70,7 @@ def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
         print "Environment set to %s"%str(env)
     
 
-    env['OS_PLATFORM'] = '%s'%os.environ['OS_PALTFORM']
+    env['OS_PLATFORM'] = '%s'%os.environ['OS_PLATFORM']
     env['ROS_DISTRO'] = '%s'%ros_distro
     env['STACK_NAME'] = '%s'%stack_name
     env['WORKSPACE'] = '%s'%workspace
