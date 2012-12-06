@@ -37,8 +37,9 @@ def remove(list1, list2):
 #
 
 def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
-    print "Testing on distro %s"%ros_distro
-    print "Testing stack %s"%stack_name
+    print "Install stuff we need first"%
+    print "(Testing on distro %s)"%ros_distro
+    print "(Testing stack %s)"%stack_name
     
    # Declare variables
     STACK_DIR = 'stack_overlay'
@@ -46,19 +47,13 @@ def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
     DEPENDS_ON_DIR = 'depends_on_overlay'
 
     # set environment
-
-
     print "Setting up environment"
     env = get_environment2()
-
-    
-
     env['OS_PLATFORM'] = '%s'%os.environ['OS_PLATFORM']
     env['ROS_DISTRO'] = '%s'%ros_distro
     env['STACK_NAME'] = '%s'%stack_name
     env['WORKSPACE'] = '%s'%workspace
     env['TEST_DEPENDS_ON'] = '%s'%test_depends_on
-
 
     helper = subprocess.Popen(('bash run_analysis.sh').split(' '), env=env)
     helper.communicate()
