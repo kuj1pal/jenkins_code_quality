@@ -71,7 +71,6 @@ def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
     
 
     env['OS_PLATFORM'] = '%s'%os.environ['OS_PLATFORM']
-    print "OS_PALTFROM : %s"%(env['OS_PLATFORM'])
     env['ROS_DISTRO'] = '%s'%ros_distro
     env['STACK_NAME'] = '%s'%stack_name
     env['WORKSPACE'] = '%s'%workspace
