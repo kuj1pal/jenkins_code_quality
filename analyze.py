@@ -29,27 +29,27 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     
     ####
     # Add ros sources to apt
-    #print "Add ros sources to apt"
-    #with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
-    #    f.write("deb http://packages.ros.org/ros/ubuntu lucid main")#%os.environ['OS_PLATFORM'])
-    #call("wget http://packages.ros.org/ros.key -O %s/ros.key"%workspace)
-    #call("apt-key add %s/ros.key"%workspace)
-    #call("apt-get update")
+    print "Add ros sources to apt"
+    with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
+        f.write("deb http://packages.ros.org/ros/ubuntu lucid main")#%os.environ['OS_PLATFORM'])
+    call("wget http://packages.ros.org/ros.key -O %s/ros.key"%workspace)
+    call("apt-key add %s/ros.key"%workspace)
+    call("apt-get update")
 
     # install stuff we need
-    #print "Installing Debian packages we need for running this script"
-    #call("apt-get install python-rosinstall python-rospkg openssh-server ros-electric-ros ros-electric-ros-release --yes")
-    #import roslib; roslib.load_manifest("job_generation")
-    #from roslib import stack_manifest
-    #import rosdistro
-    #from jobs_common import *
-    #import traceback
-    #import shutil
-    #from common import *
-    #from apt_parser import parse_apt
+    print "Installing Debian packages we need for running this script"
+    call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
+    import roslib; roslib.load_manifest("job_generation")
+    from roslib import stack_manifest
+    import rosdistro
+    from jobs_common import *
+    import traceback
+    import shutil
+    from common import *
+    from apt_parser import parse_apt
     
     # To call the qacpp-wrapper
-    #call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
+    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     #####
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
