@@ -74,7 +74,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 
     
     # Need to copy rostoolchain.cmake to call qacpp-wrapper
-    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
+    #call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     
 
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))

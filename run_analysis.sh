@@ -11,12 +11,10 @@ sudo apt-get update
 echo "Installing Debian packages we need for running this script"
 sudo apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes
 
-
 source /opt/ros/$ROS_DISTRO/setup.sh
 source $HOME/chroot_configs/set_qacpp_path.sh
 
-/bin/echo " -------------- check source ----------------- "
-export
-/bin/echo " -------------- check source end ----------------- "
+sudo cp $HOME/chroot_configs/rostoolchain.cmake /opt/ros/$ROS_DISTRO/ros/rostoolchain.cmake
 
+# call analysis
 python analyze.py $ROS_DISTRO $STACK_NAME
