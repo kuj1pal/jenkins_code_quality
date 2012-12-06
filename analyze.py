@@ -145,7 +145,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	print "Running Hudson Helper for stacks we're testing"
         res = 0
 
-    	print "os.environ['WORKSPACE']"%workspace
+    	print "os.environ['WORKSPACE']= %s"%workspace
 	#for r in range(0, int(options.repeat)+1):
 	for r in range(0, int(0)+1):
 	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
