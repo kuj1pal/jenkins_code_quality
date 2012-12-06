@@ -38,13 +38,7 @@ def get_options(required, optional):
     if 'doc' in ops:
         parser.add_option('--doc', dest = 'doc', default='doc', action='store',
                           help='doc folder')
-    if 'csv' in ops:
-        parser.add_option('--csv', dest = 'csv', default='csv', action='store',
-                          help='csv folder')
-    if 'config' in ops:
-        parser.add_option('--config', dest = 'config', default=None, action='store',
-                          help='config file')
-                          
+
     (options, args) = parser.parse_args()
 
     # check if required arguments are there
@@ -285,13 +279,11 @@ class ExportYAML:
         self.create_loc()
         
 if __name__ == '__main__':   
-    (options, args) = get_options(['path', 'config'], ['doc','csv'])
+    (options, args) = get_options(['path'], ['doc'])
     if not options:
         exit(-1)
     
-    with open(options.config) as f:
-        config = yaml.load(f)
-    
+
     # get stacks  
     print 'Exporting stacks to yaml/csv'      
     stack_files = [f for f in all_files(options.path) if f.endswith('stack.xml')]
