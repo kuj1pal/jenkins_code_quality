@@ -1,7 +1,7 @@
 #!/bin/bash
 /bin/echo '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ run_analysis.sh ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
 # Add ros sources to apt
-echo $PLATFORM
+echo $OS_PLATFORM
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $OS_PLATFORM main" > /etc/apt/sources.list.d/ros-latest.list'
 cat /etc/apt/sources.list.d/ros-latest.list
 wget http://packages.ros.org/ros.key -O $WORKSPACE/ros.key
