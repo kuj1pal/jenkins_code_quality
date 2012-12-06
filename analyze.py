@@ -40,6 +40,10 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
+    STACK_DIR = 'stack_overlay'
+    DEPENDS_DIR = 'depends_overlay'
+    DEPENDS_ON_DIR = 'depends_on_overlay'
+
 ##
     print "Setting up environment"
     env = get_environment2()
@@ -95,9 +99,6 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     #####
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
-    STACK_DIR = 'stack_overlay'
-    DEPENDS_DIR = 'depends_overlay'
-    DEPENDS_ON_DIR = 'depends_on_overlay'
 
     # global try
     try:
