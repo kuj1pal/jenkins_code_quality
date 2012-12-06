@@ -59,16 +59,25 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                                                                  ros_distro)
     print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
     
-    env['QACPPBIN'] = '%s/qacpp-current/bin'%(os.environ['HOME'])
-    env['QACPPCC'] = 'cc'
+    env['QACPPPATH'] = '%s/qacpp-current'%(os.environ['HOME'])
+    env['QACPPHTMLVIEW'] = ''
+    env['QACPPPERSONALITIES'] = '%s/qacpp-current/personalities'%(os.environ['HOME'])
+    env['QACPPTEMPFILES'] = '%s/qacpp-current/TEMP_FILES'%(os.environ['HOME'])
+    env['QACPPRESOURCESDIR'] = '%s/qacpp-current/app-defaults'%(os.environ['HOME'])
     env['QACPPDQAFILES'] = '%s/qacpp-current/demographics'%(os.environ['HOME'])
     env['QACPPHELPFILES'] = '%s/qacpp-current/help'%(os.environ['HOME'])
-    env['QACPPHTMLVIEW'] = ''
     env['QACPPOUTPATH'] = '.'
-    env['QACPPPATH'] = '%s/qacpp-current'%(os.environ['HOME'])
-    env['QACPPPERSONALITIES'] = '%s/qacpp-current/personalities'%(os.environ['HOME'])
-    env['QACPPRESOURCESDIR'] = '%s/qacpp-current/app-defaults'%(os.environ['HOME'])
-    env['QACPPTEMPFILES'] = '%s/qacpp-current/TEMP_FILES'%(os.environ['HOME'])
+    env['QACPPBIN'] = '%s/qacpp-current/bin'%(os.environ['HOME'])
+    env['HTMLVIEWBIN'] = '%s/qacpp-current/bin'%(os.environ['HOME'])
+    env['QACPPCC'] = 'cc'
+    env['XBINPATH'] = '/usr/bin'
+    env['PRLDHOST'] = '5055@localhost'
+    env['XTERM'] = 'xterm'
+    env['QACPPHTMLVIEW'] = ''
+    
+    
+    
+    
 
     if 'ros' in stack_name:
         env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
@@ -76,7 +85,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     else:
         env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
         env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
-        env['PATH'] = '/opt/ros/%s/ros/bin:%s'%(ros_distro, os.environ['PATH'])
+        env['PATH'] = '/opt/ros/%s/ros/bin:%s'%(ros_distro, os.environ['PATH']) #%s:%s:%s
+	print 'PATH %s'%( env['PATH'])
+	return
         print "Environment set to %s"%str(env)
     sys.path.append("%s"%(env['PYTHONPATH']))
 
