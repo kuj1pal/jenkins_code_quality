@@ -40,11 +40,15 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
+    # Declare variables
     STACK_DIR = 'stack_overlay'
     DEPENDS_DIR = 'depends_overlay'
     DEPENDS_ON_DIR = 'depends_on_overlay'
 
-##
+    # set environment
+    attr = []
+    attr.append('32')
+
     print "Setting up environment"
     env = get_environment2()
     env['INSTALL_DIR'] = os.getcwd()
@@ -63,11 +67,9 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
         env['PATH'] = '/opt/ros/%s/ros/bin:%s'%(ros_distro, os.environ['PATH'])
         print "Environment set to %s"%str(env)
+    sys.path.append("%s"%(env['PYTHONPATH']))
 
-##
-
-
-    ####
+    
     # Add ros sources to apt
     print "Add ros sources to apt"
     with open('/etc/apt/sources.list.d/ros-latest.list', 'w') as f:
@@ -79,13 +81,6 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     # install stuff we need
     print "Installing Debian packages we need for running this script"
     call("apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-base ros-electric-ros-release --yes")
-    # To call the qacpp-wrapper
-    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
-    sys.path.append("%s"%(env['PYTHONPATH']))
-    print "sys.apth : %s"%(sys.path)
-    #call("bash source /opt/ros/electric/setup.sh")
-    #call("export ROS_PACKAGE_PATH=/opt/ros/electric/stacks")
-    #call("cp %s/chroot_configs/"%(os.environ['HOME']))
     import roslib; roslib.load_manifest("job_generation")
     import rosdistro
     from roslib import stack_manifest
@@ -94,24 +89,18 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     import traceback
     import shutil
     from common import *
-    from apt_parser import parse_apt
+    from apt_parser import parse_apt    
+
+    # Need to copy rostoolchain.cmake to call qacpp-wrapper
+    call("sudo cp %s/chroot_configs/rostoolchain.cmake /opt/ros/electric/ros/rostoolchain.cmake"%(os.environ['HOME']))
     
-  
-    #####
+
     distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
 
     # global try
     try:
 
-        # set environment
-        attr = []
-        attr.append('32')
-      
-###
-
-###
-	
         # Parse distro file
         rosdistro_obj = rosdistro.Distro(get_rosdistro_file(ros_distro))
         print 'Operating on ROS distro %s'%rosdistro_obj.release_name
