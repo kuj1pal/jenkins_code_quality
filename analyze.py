@@ -116,7 +116,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
                     print 'Adding dependencies of stack %s'%d
                     get_depends_all(rosdistro_obj, d, depends_all)
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
-	
+	return
         if len(depends_all) > 0:
             # Install Debian packages of stack dependencies
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
