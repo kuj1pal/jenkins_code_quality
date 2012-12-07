@@ -126,7 +126,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
 	else:
             print 'Stack(s) %s do(es) not have any dependencies, not installing anything now'%str(stack_name)
 	   
-	return
+	#return
 	# Install system dependencies of stacks we're testing
         print "Installing system dependencies of stacks we're testing"
         call('rosmake rosdep', env)
