@@ -88,14 +88,14 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             os.remove('%s/.rosinstall'%STACK_DIR)
         rosinstall = ''
         #for stack in options.stack:
-	print 'stack: %s'%(stack)
-	rosinstall += stack_to_rosinstall(rosdistro_obj.stacks[stack], 'devel')
+	print 'stack: %s'%(stack_name)
+	rosinstall += stack_to_rosinstall(rosdistro_obj.stacks[stack_name], 'devel')
         print 'Generating rosinstall file [%s]'%(rosinstall_file)
         print 'Contents:\n\n'+rosinstall+'\n\n'
         with open(rosinstall_file, 'w') as f:
             f.write(rosinstall)
             print 'rosinstall file [%s] generated'%(rosinstall_file) 
-	call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(STACK_DIR, options.rosdistro, rosinstall_file), env,
+	call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(STACK_DIR, ros_distro, rosinstall_file), env,
              'Install the stacks to test from source.')
 	
 
