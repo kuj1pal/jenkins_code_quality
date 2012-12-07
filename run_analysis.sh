@@ -11,7 +11,7 @@
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu lucid main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 sudo apt-get update
-sudo apt-get install ros-electric-desktop-full
+sudo apt-get install ros-electric-desktop-full --yes
 ##
 
 # install stuff we need
