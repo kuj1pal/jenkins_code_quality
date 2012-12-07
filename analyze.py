@@ -111,7 +111,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
             depends_one = [str(d) for d in stack_manifest.parse(stack_file.read()).depends]  # convert to list
             print 'Dependencies of stack %s: %s'%(stack_name, str(depends_one))
             for d in depends_one:
-                if not d in stack_name and not d in depends_all:
+                #if not d in stack_name and not d in depends_all:
+		if d != stack_name and not d in depends_all:
                     print 'Adding dependencies of stack %s'%d
                     get_depends_all(rosdistro_obj, d, depends_all)
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
