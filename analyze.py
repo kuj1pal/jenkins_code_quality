@@ -61,6 +61,7 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     	#distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
 	call("rospack find rosdep")
+	call("rosmake rosdep",env)
 	return
     
         # Parse distro file
