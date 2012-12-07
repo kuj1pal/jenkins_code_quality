@@ -16,7 +16,7 @@ source /opt/ros/$ROS_DISTRO/setup.sh
 source $HOME/chroot_configs/set_qacpp_path.sh
 
 sudo cp $HOME/chroot_configs/rostoolchain.cmake /opt/ros/$ROS_DISTRO/ros/rostoolchain.cmake
-sudo cp $HOME/chroot_configs/source.list /etc/apt/source.list
+#sudo cp $HOME/chroot_configs/source.list /etc/apt/source.list
 
 # call analysis
 python $WORKSPACE/jenkins_code_quality/analyze.py $ROS_DISTRO $STACK_NAME
