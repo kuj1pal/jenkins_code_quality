@@ -1,22 +1,20 @@
 #!/usr/bin/env python
-import os
-import sys
-import subprocess
 import string
 import fnmatch
 import shutil
-import optparse
 from common import *
 from time import sleep
 #
 import roslib; roslib.load_manifest("job_generation")
-import rosdistro
 from roslib import stack_manifest
 import rosdistro
 from jobs_common import *
+from apt_parser import parse_apt
+import sys
+import os
+import optparse 
+import subprocess
 import traceback
-from common import *
-from apt_parser import parse_apt  
 #
 
 
@@ -42,38 +40,39 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
-    # Declare variables
-    STACK_DIR = 'stack_overlay'
-    DEPENDS_DIR = 'depends_overlay'
-    DEPENDS_ON_DIR = 'depends_on_overlay'
+    # global try
+    try:
+	
+	# Declare variables
+    	STACK_DIR = 'stack_overlay'
+    	DEPENDS_DIR = 'depends_overlay'
+    	DEPENDS_ON_DIR = 'depends_on_overlay'
 
-    # set environment
-    print "Setting up environment"
-    env = get_environment2()
-    env['INSTALL_DIR'] = os.getcwd()
-    os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
-    env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks:/home/user/el_workspace'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
+   	# set environment
+    	print "Setting up environment"
+    	env = get_environment2()
+    	env['INSTALL_DIR'] = os.getcwd()
+    	os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
+    	env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks:/home/user/el_workspace'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_DIR,
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
                                                                  ros_distro)
-    print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
+    	print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
     
-    if 'ros' in stack_name:
-        env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
-        print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
-    else:
-        env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
-        env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
-        env['PATH'] = '%s:%s:/opt/ros/%s/ros/bin:%s'%(env['QACPPBIN'],env['HTMLVIEWBIN'],ros_distro, os.environ['PATH']) #%s:%s:%s
-	#print 'PATH %s'%( env['PATH'])
-        print "Environment set to %s"%str(env)
+    	if 'ros' in stack_name:
+        	env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
+        	print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
+    	else:
+        	env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
+        	env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
+        	env['PATH'] = '%s:%s:/opt/ros/%s/ros/bin:%s'%(env['QACPPBIN'],env['HTMLVIEWBIN'],ros_distro, os.environ['PATH']) #%s:%s:%s
+		#print 'PATH %s'%( env['PATH'])
+        	print "Environment set to %s"%str(env)
     
-    distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
+    	#distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
 
-    # global try
-    try:
-
+    
         # Parse distro file
         rosdistro_obj = rosdistro.Distro(get_rosdistro_file(ros_distro))
         print 'Operating on ROS distro %s'%rosdistro_obj.release_name
@@ -83,25 +82,20 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         'Set output-color for installing to yellow')
         print 'Installing the stacks to test from source'
         rosinstall_file = '%s.rosinstall'%STACK_DIR
-	
         if os.path.exists(rosinstall_file):
             os.remove(rosinstall_file)
-        
 	if os.path.exists('%s/.rosinstall'%STACK_DIR):
             os.remove('%s/.rosinstall'%STACK_DIR)
         rosinstall = ''
-	
-        #for stack in stack_name:
-	print 'stack: %s'%(stack_name)
-	print 'Installing all stacks of ros distro %s: %s'%(ros_distro, str(rosdistro_obj.stacks.keys()))	    
-	print 'rosdistro_obj.stacks[stack_name]: %s'%(str(rosdistro_obj.stacks[stack_name]))
-        rosinstall += stack_to_rosinstall(rosdistro_obj.stacks[stack_name], 'devel')
+        #for stack in options.stack:
+	print 'stack: %s'%(stack)
+	rosinstall += stack_to_rosinstall(rosdistro_obj.stacks[stack], 'devel')
         print 'Generating rosinstall file [%s]'%(rosinstall_file)
         print 'Contents:\n\n'+rosinstall+'\n\n'
         with open(rosinstall_file, 'w') as f:
             f.write(rosinstall)
             print 'rosinstall file [%s] generated'%(rosinstall_file) 
-	call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(STACK_DIR, ros_distro, rosinstall_file), env,
+	call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(STACK_DIR, options.rosdistro, rosinstall_file), env,
              'Install the stacks to test from source.')
 	
 
