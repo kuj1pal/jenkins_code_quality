@@ -36,10 +36,25 @@ def remove(list1, list2):
             list1.remove(l)
 #
 
-def analyze(ros_distro, stack_name, workspace, test_depends_on):
+def main():
     print "Testing on distro %s"%ros_distro
     print "Testing stack %s"%stack_name
     
+    parser = optparse.OptionParser()
+    parser.add_option("--depends_on", action="store_true", default=False)
+    (options, args) = parser.parse_args()
+
+    if len(args) <= 1 or len(args)>=3:
+        print "Usage: %s ros_distro  stack_name "%sys.argv[0]
+    	print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
+        print " - with stack_name the name of the stack you want to analyze"
+        raise BuildException("Wrong arguments for run_analysis script")
+
+    ros_distro = args[0]
+    stack_name = args[1]
+    workspace = os.environ['WORKSPACE']
+
+
     # global try
     try:
 	
@@ -216,16 +231,19 @@ def main():
 
 
 
-if __name__ == '__main__':
-    # global try
-    try:
-        main()
-        print "analyze script finished cleanly"
 
-    # global catch
-    except BuildException as ex:
-        print ex.msg
-
-    except Exception as ex:
-        print "analyze script failed. Check out the console output above for details."
+    # global except
+    except Exception, ex:
+        print "Global exception caught."
+        print "%s. Check the console output for test failure details."%ex
+        traceback.print_exc(file=sys.stdout)
         raise ex
+
+
+if __name__ == '__main__':
+    try:
+        res = main()
+        sys.exit( res )
+    except Exception, ex:
+        sys.exit(-1)
+
