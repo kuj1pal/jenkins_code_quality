@@ -9,14 +9,14 @@ sudo apt-get update
 
 # install stuff we need
 echo "Installing Debian packages we need for running this script"
-sudo apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-release ros-electric-rosorg --yes
+sudo apt-get install python-rosinstall python-rospkg python-tk ia32-libs openssh-server ros-electric-ros-release ros-electric-desktop-full --yes
 #ros-electric-ros-base
 
 source /opt/ros/$ROS_DISTRO/setup.sh
 source $HOME/chroot_configs/set_qacpp_path.sh
 
 sudo cp $HOME/chroot_configs/rostoolchain.cmake /opt/ros/$ROS_DISTRO/ros/rostoolchain.cmake
-sudo cp $HOME/chroot_configs/source.list /etc/apt/source.list
+#sudo cp $HOME/chroot_configs/source.list /etc/apt/source.list
 
 # call analysis
 python $WORKSPACE/jenkins_code_quality/analyze.py $ROS_DISTRO $STACK_NAME
