@@ -16,7 +16,8 @@ sudo apt-get update
 
 # install stuff we need
 echo "Installing Debian packages we need for running this script"
-sudo apt-get install apt-utils ia32-libs python-rosinstall python-rospkg python-tk openssh-server ros-electric-ros-base ros-electric-ros-release --yes
+sudo apt-get install apt-utils ia32-libs python-rosinstall python-rospkg python-tk openssh-server ros-electric-ros-release --yes
+#ros-electric-ros-base
 
 source /opt/ros/$ROS_DISTRO/setup.sh
 source $HOME/chroot_configs/set_qacpp_path.sh
