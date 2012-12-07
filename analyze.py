@@ -134,6 +134,8 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
         call('rosdep install -y %s'%stack_name, env,
              'Install system dependencies of stack %s'%stack_name)
 	
+	call("apt-cache policy ros-electric-turtlebot")
+	return
         # Run hudson helper for stacks only
 	call('echo -e "\033[33;34m Color Text"', env,
              'Set color from build-output to blue')        
