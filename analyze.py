@@ -12,7 +12,7 @@ from jobs_common import *
 from apt_parser import parse_apt
 import sys
 import os
-import optparse 
+import optparse
 import subprocess
 import traceback
 #
@@ -31,148 +31,148 @@ def analyze(ros_distro, stack_name, workspace, test_depends_on):
     
     # global try
     try:
-	
-	# Declare variables
-    	STACK_DIR = 'stack_overlay'
-    	DEPENDS_DIR = 'depends_overlay'
-    	DEPENDS_ON_DIR = 'depends_on_overlay'
 
-   	# set environment
-    	print "Setting up environment"
-    	env = get_environment()
-    	env['INSTALL_DIR'] = os.getcwd()
-    	os.environ['WORKSPACE'] = env['INSTALL_DIR'] + '/build/' + stack_name
-    	env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
+# Declare variables
+     STACK_DIR = 'stack_overlay'
+     DEPENDS_DIR = 'depends_overlay'
+     DEPENDS_ON_DIR = 'depends_on_overlay'
+
+    # set environment
+     print "Setting up environment"
+     env = get_environment()
+     env['INSTALL_DIR'] = os.getcwd()
+     env['STACK_BUILD_DIR'] = env['INSTALL_DIR'] + '/build/' + stack_name
+     env['ROS_PACKAGE_PATH'] = '%s:%s:%s:/opt/ros/%s/stacks'%(env['INSTALL_DIR']+'/'+STACK_DIR + '/' + stack_name,
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_DIR,
                                                                  env['INSTALL_DIR']+'/'+DEPENDS_ON_DIR,
                                                                  ros_distro)
-    	print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
+     print "ROS_PACKAGE_PATH = %s"%(env['ROS_PACKAGE_PATH'])
     
-    	if 'ros' == stack_name:
-        	env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
-        	print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
-    	else:
-        	env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
-        	env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
-        	env['PATH'] = '%s:%s:/opt/ros/%s/ros/bin:%s'%(env['QACPPBIN'],env['HTMLVIEWBIN'],ros_distro, os.environ['PATH']) #%s:%s:%s
-		#print 'PATH %s'%( env['PATH'])
-        	print "Environment set to %s"%str(env)
+     if 'ros' == stack_name:
+         env['ROS_ROOT'] = env['INSTALL_DIR']+'/'+STACK_DIR+'/ros'
+         print "We're building ROS, so setting the ROS_ROOT to %s"%(env['ROS_ROOT'])
+     else:
+         env['ROS_ROOT'] = '/opt/ros/%s/ros'%ros_distro
+         env['PYTHONPATH'] = env['ROS_ROOT']+'/core/roslib/src'
+         env['PATH'] = '%s:%s:/opt/ros/%s/ros/bin:%s'%(env['QACPPBIN'],env['HTMLVIEWBIN'],ros_distro, os.environ['PATH']) #%s:%s:%s
+#print 'PATH %s'%( env['PATH'])
+         print "Environment set to %s"%str(env)
     
-    	#distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
+     #distro = rosdistro.Distro(get_rosdistro_file(ros_distro))
 
-	    
+
         # Parse distro file
         rosdistro_obj = rosdistro.Distro(get_rosdistro_file(ros_distro))
         print 'Operating on ROS distro %s'%rosdistro_obj.release_name
-	
+
         # Install the stacks to test from source
-	call('echo -e "\033[33;33m Color Text"', env,
+call('echo -e "\033[33;33m Color Text"', env,
         'Set output-color for installing to yellow')
         print 'Installing the stacks to test from source'
         rosinstall_file = '%s.rosinstall'%STACK_DIR
         if os.path.exists(rosinstall_file):
             os.remove(rosinstall_file)
-	if os.path.exists('%s/.rosinstall'%STACK_DIR):
+if os.path.exists('%s/.rosinstall'%STACK_DIR):
             os.remove('%s/.rosinstall'%STACK_DIR)
         rosinstall = ''
         #for stack in options.stack:
-	print 'stack: %s'%(stack_name)
-	rosinstall += stack_to_rosinstall(rosdistro_obj.stacks[stack_name], 'devel')
+print 'stack: %s'%(stack_name)
+rosinstall += stack_to_rosinstall(rosdistro_obj.stacks[stack_name], 'devel')
         print 'Generating rosinstall file [%s]'%(rosinstall_file)
         print 'Contents:\n\n'+rosinstall+'\n\n'
         with open(rosinstall_file, 'w') as f:
             f.write(rosinstall)
-            print 'rosinstall file [%s] generated'%(rosinstall_file) 
-	call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(STACK_DIR, ros_distro, rosinstall_file), env,
+            print 'rosinstall file [%s] generated'%(rosinstall_file)
+call('rosinstall --rosdep-yes %s /opt/ros/%s %s'%(STACK_DIR, ros_distro, rosinstall_file), env,
              'Install the stacks to test from source.')
-	
+
 
         # get all stack dependencies of stacks we're testing
         print "Computing dependencies of stacks we're testing"
         depends_all = []
-		
-        #for stack in stack_name:    
+
+        #for stack in stack_name:
         stack_xml = '%s/%s/stack.xml'%(STACK_DIR, stack_name)
         call('ls %s'%stack_xml, env, 'Checking if stack %s contains "stack.xml" file'%stack_name)
-	 		
+
         with open(stack_xml) as stack_file:
-            depends_one = [str(d) for d in stack_manifest.parse(stack_file.read()).depends]  # convert to list
+            depends_one = [str(d) for d in stack_manifest.parse(stack_file.read()).depends] # convert to list
             print 'Dependencies of stack %s: %s'%(stack_name, str(depends_one))
             for d in depends_one:
                 #if not d in stack_name and not d in depends_all:
-		if d != stack_name and not d in depends_all:
+if d != stack_name and not d in depends_all:
                     print 'Adding dependencies of stack %s'%d
                     get_depends_all(rosdistro_obj, d, depends_all)
                     print 'Resulting total dependencies of all stacks that get tested: %s'%str(depends_all)
-	
+
         if len(depends_all) > 0:
             # Install Debian packages of stack dependencies
             print 'Installing debian packages of %s dependencies: %s'%(stack_name, str(depends_all))
             call('sudo apt-get update', env)
             call('sudo apt-get install %s --yes'%(stacks_to_debs(depends_all, ros_distro)), env)
-	
-	else:
+
+else:
             print 'Stack(s) %s do(es) not have any dependencies, not installing anything now'%str(stack_name)
-	   
-	
-	# Install system dependencies of stacks we're testing
+
+
+# Install system dependencies of stacks we're testing
         print "Installing system dependencies of stacks we're testing"
         call('rosmake rosdep', env)
         #for stack in stack_name:
         call('rosdep install -y %s'%stack_name, env,
              'Install system dependencies of stack %s'%stack_name)
-	
-	# Run hudson helper for stacks only
-	call('echo -e "\033[33;34m Color Text"', env,
-             'Set color from build-output to blue')        
-	print "Running Hudson Helper for stacks we're testing"
+
+# Run hudson helper for stacks only
+call('echo -e "\033[33;34m Color Text"', env,
+             'Set color from build-output to blue')
+print "Running Hudson Helper for stacks we're testing"
         res = 0
 
-    	#for r in range(0, int(options.repeat)+1):
-	for r in range(0, int(0)+1):
-	    env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
-	    helper = subprocess.Popen(('%s/jenkins_code_quality/build_helper.py --dir %s build'%(workspace,STACK_DIR + '/' + stack_name)).split(' '), env=env)
+     #for r in range(0, int(options.repeat)+1):
+for r in range(0, int(0)+1):
+env['ROS_TEST_RESULTS_DIR'] = env['ROS_TEST_RESULTS_DIR'] + '/' + STACK_DIR + '_run_' + str(r)
+helper = subprocess.Popen(('%s/jenkins_scripts/build_helper.py --dir %s build'%(workspace,STACK_DIR + '/' + stack_name)).split(' '), env=env)
             helper.communicate()
             print "helper_return_code is: %s"%(helper.returncode)
-	    if helper.returncode != 0:
-	        res = helper.returncode
+if helper.returncode != 0:
+res = helper.returncode
                 print "helper_return_code is: %s"%(helper.returncode)
                 raise Exception("build_helper.py failed. Often an analysis mistake. Check out the console output above for details.")
-	   
+
             # concatenate filelists
             call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
-	    stack_dir = STACK_DIR + '/' + str(stack_name)
+stack_dir = STACK_DIR + '/' + str(stack_name)
             filelist = stack_dir + '/filelist.lst'
-            helper = subprocess.Popen(('%s/jenkins_code_quality/concatenate_filelists.py --dir %s --filelist %s'%(workspace,stack_dir, filelist)).split(' '), env=env)
+            helper = subprocess.Popen(('%s/jenkins_scripts/concatenate_filelists.py --dir %s --filelist %s'%(workspace,stack_dir, filelist)).split(' '), env=env)
             helper.communicate()
-            print 'Concatenate filelists done --> %s'%str(stack_name) 
+            print 'Concatenate filelists done --> %s'%str(stack_name)
              
             # run cma
             cmaf = stack_dir + '/' + str(stack_name)
             helper = subprocess.Popen(('pal QACPP -cmaf %s -list %s'%(cmaf, filelist)).split(' '), env=env)
             helper.communicate()
-            print 'CMA analysis done --> %s'%str(stack_name)  
+            print 'CMA analysis done --> %s'%str(stack_name)
 
             # export metrics to yaml and csv files
-	    print 'stack_dir: %s '%str(stack_dir)
-	    print 'stack_name[0]: %s '%str(stack_name)
-            helper = subprocess.Popen(('%s/jenkins_code_quality/export_metrics_to_yaml.py --path %s --doc doc --csv csv --config %s/jenkins_code_quality/export_config_roscon.yaml'%(workspace,stack_dir,workspace)).split(' '), env=env)
+print 'stack_dir: %s '%str(stack_dir)
+print 'stack_name[0]: %s '%str(stack_name)
+            helper = subprocess.Popen(('%s/jenkins_scripts/export_metrics_to_yaml.py --path %s --doc doc --csv csv --config %s/jenkins_scripts/export_config_roscon.yaml'%(workspace,stack_dir,workspace)).split(' '), env=env)
             helper.communicate()
-	    call('echo -e "\033[33;0m Color Text"', env,
+call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
-            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)        
+            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)
             
             # push results to server
-	    print 'stack_dir: %s '%str(stack_dir)
-	    print 'stack_name[0]: %s '%str(stack_name)
-            helper = subprocess.Popen(('%s/jenkins_code_quality/push_results_to_server.py --path %s --doc doc'%(workspace,stack_dir)).split(' '), env=env)
+print 'stack_dir: %s '%str(stack_dir)
+print 'stack_name[0]: %s '%str(stack_name)
+            helper = subprocess.Popen(('%s/jenkins_scripts/push_results_to_server.py --path %s --doc doc'%(workspace,stack_dir)).split(' '), env=env)
             helper.communicate()
-	    call('echo -e "\033[33;0m Color Text"', env,
+call('echo -e "\033[33;0m Color Text"', env,
              'Set color to white')
-            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)       
+            print 'Export metrics to yaml and csv files done --> %s'%str(stack_name)
             print 'Analysis of stack %s done'%str(stack_name)
-	if res != 0:
+if res != 0:
             return res
 
 
@@ -190,8 +190,8 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) <= 1 or len(args)>=3:
-        print "Usage: %s ros_distro  stack_name "%sys.argv[0]
-    	print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
+        print "Usage: %s ros_distro stack_name "%sys.argv[0]
+     print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
         print " - with stack_name the name of the stack you want to analyze"
         raise BuildException("Wrong arguments for analyze script")
 
