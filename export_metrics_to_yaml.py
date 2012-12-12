@@ -3,32 +3,20 @@ import os
 from apt_parser import parse_apt
 import sys
 import os
-import optparse 
+import optparse
 import subprocess
 import traceback
 import numpy
 import yaml
 import codecs
-#
 import roslib; roslib.load_manifest("job_generation")
 from roslib import stack_manifest
 import rosdistro
 from jobs_common import *
-from apt_parser import parse_apt
-import sys
-import os
-import optparse 
-import subprocess
-import traceback
-#
 
-# Global settings
-env = get_environment()
+env= get_environment()
 env['INSTALL_DIR'] = os.getcwd()
-WIKI_SERVER_KEY_PATH = os.environ['HOME'] +'/chroot_configs/wiki_server_key/ec2-keypair.pem'
-#WIKI_SERVER_KEY_PATH = env['INSTALL_DIR'] + '/chroot_configs/wiki_server_key/ec2-keypair.pem'
-ROS_WIKI_SERVER = 'ubuntu@ec2-184-169-231-58.us-west-1.compute.amazonaws.com:~/doc'
-      
+
 def get_options(required, optional):
     parser = optparse.OptionParser()
     ops = required + optional
@@ -142,8 +130,8 @@ class ExportYAML:
         if not metric in self.metrics:
             return;
         data = []
-	array = self.metrics[metric].data
-	for d in array:
+array = self.metrics[metric].data
+for d in array:
             data.append(float(d[4]))
         bin_size = (float(maxval) - float(minval))/(int(numbins))
         histogram_bins = [float(minval)+bin_size*x for x in range(numbins+1)]
@@ -158,9 +146,6 @@ class ExportYAML:
         histogram_labels[-1] = '>' + histogram_labels[-1]
         
         (hist,bin_edges) = numpy.histogram(data, histogram_bins)
-        #print hist
-        #print histogram_labels
-        #print histogram_bins
         m = self.metrics[metric]
         for i in range(len(hist)):
             m.histogram_counts.append(hist[i])
@@ -172,14 +157,14 @@ class ExportYAML:
         package_dir = self.get_package_dir(met_file)
         stack_dir = self.get_stack_dir(met_file)
         filename = ''
-        name = ''   
+        name = ''
         met = open(met_file,'r')
         while met:
             l = met.readline()
             if not l:
                 break
             l = l.replace('\n','')
-            if l.startswith('<S>'): 
+            if l.startswith('<S>'):
                 tokens = l.split(' ')
                 if len(tokens)<2: continue
                 cmd = tokens[0]
@@ -202,7 +187,7 @@ class ExportYAML:
                 metric = self.metrics[metric_name]
                 #metric.data.append([stack,package,name,cmd,val,filename])
                 uniqueid = filename+name
-                if not uniqueid in metric.uniqueids:                        
+                if not uniqueid in metric.uniqueids:
                     metric.data.append([stack,package,name,cmd,val])
                     metric.uniqueids[uniqueid] = True
         
@@ -213,13 +198,13 @@ class ExportYAML:
         filename = self.doc + '/' + 'code_quality.yaml'
         d = {}
         for m in self.config['metrics'].keys():
-            if not m in self.metrics: 
+            if not m in self.metrics:
                 continue
             metric = self.metrics[m]
             config = self.config['metrics'][m]
-            config['histogram_bins'] = [b for b in metric.histogram_labels] 
-            config['histogram_counts'] = [int(b) for b in metric.histogram_counts] 
-	    d[m] = config
+            config['histogram_bins'] = [b for b in metric.histogram_labels]
+            config['histogram_counts'] = [int(b) for b in metric.histogram_counts]
+d[m] = config
             
         #print yaml.dump(d)
         
@@ -227,38 +212,38 @@ class ExportYAML:
         d = self.safe_encode(d)
         
         with codecs.open(filename, mode='w', encoding='utf-8') as f:
-            f.write(yaml.safe_dump(d, default_style="'")) 
+            f.write(yaml.safe_dump(d, default_style="'"))
              
     def create_csv(self):
         for m in self.config['metrics'].keys():
-            if not m in self.metrics: 
+            if not m in self.metrics:
                 continue
-            filename = self.csv + '/' + m + '.csv' 
+            filename = self.csv + '/' + m + '.csv'
             data = self.metrics[m].data
             f = open(filename,"w")
             for d in data:
                 string = ';'.join(d)
-                f.write(string + '\n') 
+                f.write(string + '\n')
             f.close()
             
     def create_csv_hist(self):
         for m in self.config['metrics'].keys():
-            if not m in self.metrics: 
+            if not m in self.metrics:
                 continue
-            metric = self.metrics[m]    
-            filename = self.csv + '/' + m + '_hist.csv' 
+            metric = self.metrics[m]
+            filename = self.csv + '/' + m + '_hist.csv'
             labels = metric.histogram_labels
             counts = metric.histogram_counts
             f = open(filename,"w")
             for i in range(len(counts)):
                 string = ';'.join([labels[i],repr(counts[i])])
                 f.write(string + '\n')
-            f.close()  
+            f.close()
                
     def create_loc(self):
         filename = self.doc + '/' + 'code_quantity.yaml'
-	#print 'cloc.pl %s --not-match-d=build --yaml --out %s'%(self.path, filename)
-        helper = subprocess.Popen(('cloc.pl %s --not-match-d=build --yaml --out %s'%(self.path, filename)).split(' '),env=env)
+        print "os.environ['WORKSPACE']: %s"%(os.environ['WORKSPACE'])
+helper = subprocess.Popen(('%s/jenkins_scripts/cloc.pl %s --not-match-d=build --yaml --out %s'%(os.environ['WORKSPACE'],self.path, filename)).split(' '),env=env)
         helper.communicate()
                       
     def export(self):
@@ -268,11 +253,11 @@ class ExportYAML:
             self.process_met_file(met)
             
         # create histograms
-	for m in self.config['metrics'].keys():
-            if not m in self.metrics: 
+for m in self.config['metrics'].keys():
+            if not m in self.metrics:
                 continue
             config = self.config['metrics'][m]
-	    self.histogram(m, config['histogram_num_bins'], config['histogram_minval'], config['histogram_maxval'], config['data_type'])
+self.histogram(m, config['histogram_num_bins'], config['histogram_minval'], config['histogram_maxval'], config['data_type'])
 
         # create yaml
         self.create_code_quality_yaml()
@@ -284,7 +269,7 @@ class ExportYAML:
         # export code lines of code
         self.create_loc()
         
-if __name__ == '__main__':   
+if __name__ == '__main__':
     (options, args) = get_options(['path', 'config'], ['doc','csv'])
     if not options:
         exit(-1)
@@ -292,8 +277,8 @@ if __name__ == '__main__':
     with open(options.config) as f:
         config = yaml.load(f)
     
-    # get stacks  
-    print 'Exporting stacks to yaml/csv'      
+    # get stacks
+    print 'Exporting stacks to yaml/csv'
     stack_files = [f for f in all_files(options.path) if f.endswith('stack.xml')]
     stack_dirs = [os.path.dirname(f) for f in stack_files]
     for stack_dir in stack_dirs:
@@ -305,11 +290,10 @@ if __name__ == '__main__':
             os.makedirs(doc_dir)
         hh = ExportYAML(config, stack_dir, doc_dir, csv_dir)
         hh.export()
-	#call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
-	#	,env, 'Push stack-yaml-file to ros-wiki ')
-	        
+
+
     # get packages
-    print 'Exporting packages to yaml/csv'  
+    print 'Exporting packages to yaml/csv'
     package_files = [f for f in all_files(options.path) if f.endswith('manifest.xml')]
     package_dirs = [os.path.dirname(f) for f in package_files]
     for package_dir in package_dirs:
@@ -321,6 +305,4 @@ if __name__ == '__main__':
             os.makedirs(doc_dir)
         hh = ExportYAML(config, package_dir, doc_dir, csv_dir)
         hh.export()
-	#call('sudo scp -r -i %s %s %s'%(WIKI_SERVER_KEY_PATH, doc_dir, ROS_WIKI_SERVER)
-	#	,env, 'Push package-yaml-file to ros-wiki ')        
 
