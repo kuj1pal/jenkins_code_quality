@@ -8,18 +8,15 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) <= 1 or len(args)>=3:
-        print "Usage: %s ros_distro  stack_name "%sys.argv[0]
+        print "Usage: %s ros_distro stack_name "%sys.argv[0]
         print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
         print " - with stack_name the name of the stack you want to analyze"
-        #print " - with version 'latest', 'devel', or the actual version number (e.g. 0.2.5)."
         raise BuildException("Wrong arguments for code_quality_stack script")
 
     ros_distro = args[0]
     stack_name = args[1]
     workspace = os.environ['WORKSPACE']
 
-    #print "Running prerelease test on distro %s and repositories %s"%(ros_distro, ', '.join(["%s (%s)"%(r,v) for r, v in zip(repo_list, version_list)]))
-    #test_repositories(ros_distro, repo_list, version_list, workspace, test_depends_on=True)
     print "Running code_quality_stack on distro %s and stack %s"%(ros_distro,stack_name)
     run_analysis(ros_distro, stack_name, workspace, test_depends_on=True)
 
