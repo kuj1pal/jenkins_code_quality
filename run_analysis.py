@@ -4,18 +4,11 @@ import sys
 import subprocess
 import string
 import fnmatch
-import shutil
+#import shutil
 import optparse
 from common import *
 from time import sleep
-#
-#import roslib; roslib.load_manifest("job_generation")
-#from roslib import stack_manifest
-#import rosdistro
-#from jobs_common import *
-#from apt_parser import parse_apt
 import traceback
-#
 
 
 def get_environment2():
@@ -28,35 +21,33 @@ def get_environment2():
     my_env['BUILD_NUMBER'] = os.getenv('BUILD_NUMBER', '')
     my_env['ROS_TEST_RESULTS_DIR'] = os.getenv('ROS_TEST_RESULTS_DIR', my_env['WORKSPACE']+'/test_results')
     my_env['PWD'] = os.getenv('WORKSPACE', '')
+    #my_env['ROS_PACKAGE_MIRROR'] = 'http://packages.ros.org/ros/ubuntu'
+    my_env['ROS_PACKAGE_MIRROR'] = 'http://apt-mirror/packages/ros'
+    
     return my_env
+
 
 def remove(list1, list2):
     for l in list2:
         if l in list1:
             list1.remove(l)
-#
+
 
 def run_analysis(ros_distro, stack_name, workspace, test_depends_on):
-    print "Install stuff we need first"
+    print "Install basic stuff we need"
     print "(Testing on distro %s)"%ros_distro
     print "(Testing stack %s)"%stack_name
     
-   # Declare variables
-    STACK_DIR = 'stack_overlay'
-    DEPENDS_DIR = 'depends_overlay'
-    DEPENDS_ON_DIR = 'depends_on_overlay'
-
     # set environment
-    print "Setting up environment"
+    print "Set basic environment"
     env = get_environment2()
     env['OS_PLATFORM'] = '%s'%os.environ['OS_PLATFORM']
     env['ROS_DISTRO'] = '%s'%ros_distro
     env['STACK_NAME'] = '%s'%stack_name
     env['WORKSPACE'] = '%s'%workspace
     env['TEST_DEPENDS_ON'] = '%s'%test_depends_on
-
-    print os.environ['WORKSPACE']
-    helper = subprocess.Popen(('bash %s/jenkins_code_quality/run_analysis.sh'%(os.environ['WORKSPACE'])).split(' '), env=env)
+   
+    helper = subprocess.Popen(('bash %s/jenkins_scripts/run_analysis.sh'%(os.environ['WORKSPACE'])).split(' '), env=env)
     helper.communicate()
    
 
@@ -67,8 +58,8 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) <= 1 or len(args)>=3:
-        print "Usage: %s ros_distro  stack_name "%sys.argv[0]
-    	print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
+        print "Usage: %s ros_distro stack_name "%sys.argv[0]
+     print " - with ros_distro the name of the ros distribution (e.g. 'electric' or 'fuerte')"
         print " - with stack_name the name of the stack you want to analyze"
         raise BuildException("Wrong arguments for run_analysis script")
 
