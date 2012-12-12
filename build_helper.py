@@ -22,7 +22,7 @@ else:
 
 # This URI can change over time as they make new releases.
 COVMONSTER_URI = 'http://code.ros.org/svn/ros/installers/trunk/hudson/covmonster.py'
-ATABLE_URI = 'http://code.ros.org/svn/ros/installers/trunk/hudson/atable.cst' 
+ATABLE_URI = 'http://code.ros.org/svn/ros/installers/trunk/hudson/atable.cst'
 ROSDEP_PY_URI = 'https://code.ros.org/svn/ros/installers/trunk/rosdeb/rosdep.py'
 BUILD_DEBS_PY_URI = 'https://code.ros.org/svn/ros/installers/trunk/rosdeb/build_debs.py'
 REROOT_PY_URI = 'https://code.ros.org/svn/ros/installers/trunk/rosdeb/reroot.py'
@@ -44,11 +44,11 @@ EMAIL_FROM_ADDR = 'ROS on-demand build <noreply@willowgarage.com>'
 # Where we wish to eventually install a .deb
 BUILDDEB_INSTALL_PATH = '/opt/ros/wg-all'
 
-dummy_test_results_simple = """<?xml version="1.0" encoding="utf-8"?><testsuite name="no_tests_run" tests="0" errors="0" failures="0" time="0.0">  <system-out><![CDATA[]]></system-out>  <system-err><![CDATA[]]></system-err></testsuite>
+dummy_test_results_simple = """<?xml version="1.0" encoding="utf-8"?><testsuite name="no_tests_run" tests="0" errors="0" failures="0" time="0.0"> <system-out><![CDATA[]]></system-out> <system-err><![CDATA[]]></system-err></testsuite>
 """
 
-dummy_test_results_simple = """<?xml version="1.0" encoding="utf-8"?><testsuite name="dummy.TEST-test_dummy" tests="1" errors="0" failures="0" time="0.037">  <testcase classname="dummy.TEST-test_dummy.NotTested" name="dummy.test_dummy/NotTested" time="0.0">
-  </testcase>  <system-out><![CDATA[]]></system-out>  <system-err><![CDATA[]]></system-err></testsuite>"""
+dummy_test_results_simple = """<?xml version="1.0" encoding="utf-8"?><testsuite name="dummy.TEST-test_dummy" tests="1" errors="0" failures="0" time="0.037"> <testcase classname="dummy.TEST-test_dummy.NotTested" name="dummy.test_dummy/NotTested" time="0.0">
+</testcase> <system-out><![CDATA[]]></system-out> <system-err><![CDATA[]]></system-err></testsuite>"""
 
 
 
@@ -154,11 +154,11 @@ class HudsonHelper:
         self.post_processors = options.post_processors
         self.keep_going = options.keep_going
     
-        if (len(options.repos) + 
+        if (len(options.repos) +
             len(options.repos_test) +
-            len(options.dirs) + 
+            len(options.dirs) +
             len(options.dirs_test) +
-            len(options.pkgs) + 
+            len(options.pkgs) +
             len(options.pkgs_test)) == 0:
             parser.error("nothing to do; must specify at least one of --distro, --repo, --dir, --pkg, --distro-test, --repo-test, --pkg-test, --dir-test, or --stack-data")
     
@@ -172,7 +172,7 @@ class HudsonHelper:
             self.repos.append((r[1], r[0]))
 
         # NOTE: the following addition puts directories specified by --dir-test
-        # ahead of those specified by --dir.  This is correct for ondemand test
+        # ahead of those specified by --dir. This is correct for ondemand test
         # builds of stack/trunk against */latest, but will not be right in
         # general.
         self.dirs = options.dirs_test + options.dirs
@@ -184,10 +184,10 @@ class HudsonHelper:
         self.email = options.email
 
         self.distro = None
-	
+
 
     def main(self):
-	stderrs = []
+stderrs = []
         if self.cmd in ['checkout', 'co', 'update', 'up']:
             for k, url in self.repos:
                 v = Popen(['svn', 'co', url, k], stdout=sys.stdout, stdin=sys.stdin, stderr=sys.stderr).communicate()
@@ -210,11 +210,11 @@ class HudsonHelper:
             if stderrs:
                 print "WARNING: svn reported the following errors:"
                 print "\n----\n".join(stderrs)
-	
+
     def build(self):
-	# Hudson sets the WORKSPACE env var
-        workspace = os.environ['WORKSPACE']
-	    #workspace = '/tmp'
+# Hudson sets the WORKSPACE env var
+        workspace = os.environ['STACK_BUILD_DIR']
+#workspace = '/tmp'
         os.environ['JOB_NAME'] = 'build'
 
         ros_test_results_dir = rospkg.get_test_results_dir()
@@ -223,17 +223,17 @@ class HudsonHelper:
         # Blow away old ~/.ros content. self.dotrosname is used at the end
         # of this method, for tarring up the result of this run.
         self.dotrosname = os.path.join(workspace, '.ros')
-	if os.path.isdir(self.dotrosname):
+if os.path.isdir(self.dotrosname):
             try:
                 shutil.rmtree(self.dotrosname)
             except OSError, e:
-        	# Ignore this; it's usually a stale NFS handle.
+         # Ignore this; it's usually a stale NFS handle.
                 pass
         elif os.path.isfile(self.dotrosname):
             os.unlink(self.dotrosname)
         if not os.path.isdir(self.dotrosname):
             os.makedirs(self.dotrosname)
-	self.rosmake_path = 'rosmake'
+self.rosmake_path = 'rosmake'
 
         local_paths = []
         for r in self.repos:
@@ -247,7 +247,7 @@ class HudsonHelper:
             ros_package_path = ':'.join(local_paths + [os.environ['ROS_PACKAGE_PATH']])
         else:
             ros_package_path = ':'.join(local_paths)
-	    
+
 
         env_vars = os.environ.copy()
         # The JAVA_HOME setting is specific to Ubuntu.
@@ -260,10 +260,10 @@ class HudsonHelper:
                          'ROBOT' : 'sim',
                          'JAVA_HOME' : '/usr/lib/jvm/java-6-openjdk/',
                          'DISPLAY' : ':0.0'})
-	  
+
         print env_vars['ROS_PACKAGE_PATH']
        
-	
+
         if 'SVN_REVISION' in env_vars:
             del env_vars['SVN_REVISION']
 
@@ -287,23 +287,23 @@ class HudsonHelper:
         os.makedirs(output_dir)
         open(os.path.join(output_dir, 'buildfailures.txt'), 'w')
         open(os.path.join(output_dir, 'buildfailures-with-context.txt'), 'w')
-	
+
         if (len(self.pkgs) + len(self.pkgs_test)) > 0:
           pkg_arg = self.pkgs + self.pkgs_test
         else:
           pkg_arg = ['-a']
         build_cmd = [self.rosmake_path, '-Vr', '--profile', '--skip-blacklist', '--output=%s'%output_dir] + self.extra_rosmake_args + pkg_arg
-	
-	
+
+
         # Temporary
         if os.uname()[0] == 'Darwin':
             build_cmd.append('--skip-blacklist-osx')
-	
+
         try:
             print >> sys.stderr, '[%s] %s'%(NAME,build_cmd)
-	    
+
             if not DEBUG:
-                print "Run rosmake" 
+                print "Run rosmake"
                 check_call(build_cmd, env=env_vars, stdout=sys.stdout, stdin=sys.stdin, stderr=sys.stderr)
         except (CalledProcessError, OSError), e:
             failure = True
@@ -311,10 +311,10 @@ class HudsonHelper:
             #assert False
             #assert false
             #if not self.keep_going:
-            #    self.post_build(failure, test_failure, workspace)
-	
+            # self.post_build(failure, test_failure, workspace)
 
-if __name__ == '__main__':            
+
+if __name__ == '__main__':
     hh = HudsonHelper(sys.argv)
     hh.main()
 
